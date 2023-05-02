@@ -1,0 +1,7 @@
+.game {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-rows: 150px;
+  height: 100%;
+  background-color: #0c0a09;
+}
