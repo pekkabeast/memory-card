@@ -13,4 +13,19 @@
   border-radius: 5px;
   color: white;
   overflow: hidden;
+  appearance: none;
+  border: 1px solid #7f1d1d;
+  transition: 0.2s;
+}
+
+.card:hover {
+  border: 2px solid #450a0a;
+}
+
+.card:active {
+  border: none;
+}
+
+.card img {
+  pointer-events: none;
 }

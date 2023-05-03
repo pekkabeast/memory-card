@@ -1,5 +1,4 @@
 * {
-  outline: 1px solid red;
   margin: 0;
   padding: 0;
 }
@@ -7,6 +6,11 @@
 html,
 body,
 #root,
-.App {
+.app {
   height: 100%;
+}
+
+.app {
+  display: flex;
+  flex-flow: column;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import uniqid from "uniqid";
 import Card from "./Card";
 import "../styles/Game.css";
@@ -20,6 +20,44 @@ function Game() {
     { image: "12", description: "Yuiichiro", id: uniqid() },
   ]);
 
+  const [clickedCardList, setClickedCardList] = useState([]);
+
+  const [score, setScore] = useState([0, 0]);
+
+  let topScore = 0;
+
+  function getCardId(clickedElement) {
+    let clickedCardId = clickedElement.id;
+    if (clickedCardId === "") {
+      clickedCardId = clickedElement.parentElement.id;
+    }
+    return clickedCardId;
+  }
+
+  function checkClickedCardList(cardId) {
+    const checkCard = clickedCardList.filter((card) => card.id === cardId);
+    return checkCard.length === 0
+      ? cardList.filter((card) => card.id === cardId)
+      : false;
+  }
+
+  const handleCardClick = useCallback((event) => {
+    const clickedCardId = getCardId(event.target);
+    const checkedCard = checkClickedCardList(clickedCardId);
+
+    if (checkedCard) {
+      setClickedCardList([...clickedCardList, checkedCard[0]]);
+      setScore(score + 1);
+    } else {
+      if (score > topScore) {
+        topScore = score;
+      }
+      setScore(0);
+      setClickedCardList([]);
+      console.log(`Top score is ${topScore}`);
+    }
+  });
+
   function shuffleArray(array) {
     const newArray = array;
     for (let i = array.length - 1; i > 0; i -= 1) {
@@ -31,15 +69,17 @@ function Game() {
 
   return (
     <div className="game">
-      {console.log(cardList)}
-      {shuffleArray(cardList).map((card) => (
-        <Card
-          image={card.image}
-          description={card.description}
-          cardId={card.id}
-          key={card.id}
-        />
-      ))}
+      <div className="board-wrapper">
+        {shuffleArray(cardList).map((card) => (
+          <Card
+            image={card.image}
+            description={card.description}
+            cardId={card.id}
+            handleCardClick={handleCardClick}
+            key={card.id}
+          />
+        ))}
+      </div>
     </div>
   );
 }
