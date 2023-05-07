@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import uniqid from "uniqid";
 import Card from "./Card";
 import "../styles/Game.css";
+import Scoreboard from "./Scoreboard";
 
 function Game() {
   // eslint-disable-next-line
@@ -24,8 +25,6 @@ function Game() {
 
   const [score, setScore] = useState([0, 0]);
 
-  let topScore = 0;
-
   function getCardId(clickedElement) {
     let clickedCardId = clickedElement.id;
     if (clickedCardId === "") {
@@ -47,14 +46,15 @@ function Game() {
 
     if (checkedCard) {
       setClickedCardList([...clickedCardList, checkedCard[0]]);
-      setScore(score + 1);
+      setScore([score[0] + 1, score[1]]);
     } else {
-      if (score > topScore) {
-        topScore = score;
+      if (score[0] > score[1]) {
+        const tempScore = score[0];
+        setScore([0, tempScore]);
+      } else {
+        setScore([0, score[1]]);
       }
-      setScore(0);
       setClickedCardList([]);
-      console.log(`Top score is ${topScore}`);
     }
   });
 
@@ -69,6 +69,7 @@ function Game() {
 
   return (
     <div className="game">
+      <Scoreboard score={score} />
       <div className="board-wrapper">
         {shuffleArray(cardList).map((card) => (
           <Card
